@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "docforge"
+version = "0.1.0"
+description = "DocForge is a lightweight document ingestion and retrieval platform for PDF documents."
+authors = ["DocForge Contributors"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/docforge/docforge"
+repository = "https://github.com/docforge/docforge"
+keywords = ["documents", "retrieval", "rag", "fastapi", "pdf"]
+packages = [{ include = "docforge" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+fastapi = "^0.115.14"
+uvicorn = {extras = ["standard"], version = "^0.32.1"}
+pydantic = "^2.9.0"
+pydantic-settings = "^2.4.0"
+sqlmodel = "^0.0.22"
+python-multipart = "^0.0.9"
+pymupdf = "^1.26.4"
+sentence-transformers = "^5.6.0"
+chromadb = "^1.5.9"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.0"
+pytest-asyncio = "^0.24.0"
+ruff = "^0.8.0"
+httpx = "^0.28.0"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
