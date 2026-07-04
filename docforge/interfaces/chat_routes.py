@@ -26,7 +26,10 @@ def chat(request: ChatRequest) -> ChatResponse:
     if not request.document_id:
         raise HTTPException(status_code=400, detail="document_id is required")
 
-    vector_store = ChromaVectorStore(collection_name="docforge", persist_directory="./storage/chroma")
+    vector_store = ChromaVectorStore(
+        collection_name="docforge",
+        persist_directory="./storage/chroma",
+    )
 
     if vector_store.get_chunk_count() == 0:
         raise HTTPException(status_code=404, detail="No indexed documents found")
@@ -37,11 +40,18 @@ def chat(request: ChatRequest) -> ChatResponse:
         metadata_filter={"document_id": request.document_id},
     )
     source_pages = sorted(
-        {int(item.get("page_number", 0)) for item in retrieved if str(item.get("page_number", "")).isdigit()}
+        {
+            int(item.get("page_number", 0))
+            for item in retrieved
+            if str(item.get("page_number", "")).isdigit()
+        }
     )
     metadata = [item for item in retrieved]
 
-    answer = "Based on the indexed document, the most relevant passages suggest an answer to your question."
+    answer = (
+        "Based on the indexed document, the most relevant passages suggest an answer to "
+        "your question."
+    )
     return ChatResponse(
         answer=answer,
         confidence=0.5,

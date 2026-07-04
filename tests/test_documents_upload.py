@@ -39,7 +39,9 @@ def test_upload_rejects_non_pdf_files(tmp_path: Path) -> None:
 def test_upload_accepts_pdf_and_persists_metadata(tmp_path: Path) -> None:
     client = build_client(tmp_path)
 
-    pdf_bytes = b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF"
+    pdf_bytes = (
+        b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF"
+    )
 
     response = client.post(
         "/documents/upload",

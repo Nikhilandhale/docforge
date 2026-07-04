@@ -9,8 +9,7 @@ from docforge.domain.parsing_models import Chunk, ParsedDocument
 
 
 class Parser(Protocol):
-    def parse(self, file_path: Path) -> ParsedDocument:
-        ...
+    def parse(self, file_path: Path) -> ParsedDocument: ...
 
 
 class PDFParser:

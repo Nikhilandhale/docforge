@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Optional
+from datetime import UTC, datetime
+from enum import StrEnum
 from uuid import UUID, uuid4
 
 from sqlmodel import Field, SQLModel
 
 
-class DocumentStatus(str, Enum):
+class DocumentStatus(StrEnum):
     uploaded = "uploaded"
     processing = "processing"
     indexed = "indexed"
@@ -22,9 +21,9 @@ class Document(SQLModel, table=True):
     file_size_bytes: int
     content_type: str
     status: DocumentStatus = Field(default=DocumentStatus.uploaded)
-    uploaded_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    checksum: Optional[str] = None
+    uploaded_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    checksum: str | None = None
 
 
 class DocumentRead(SQLModel):
@@ -36,7 +35,7 @@ class DocumentRead(SQLModel):
     status: DocumentStatus
     uploaded_at: datetime
     updated_at: datetime
-    checksum: Optional[str] = None
+    checksum: str | None = None
 
 
 class DocumentCreate(SQLModel):
@@ -45,4 +44,4 @@ class DocumentCreate(SQLModel):
     file_size_bytes: int
     content_type: str
     status: DocumentStatus = DocumentStatus.uploaded
-    checksum: Optional[str] = None
+    checksum: str | None = None

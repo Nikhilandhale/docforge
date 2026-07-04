@@ -6,8 +6,7 @@ from sentence_transformers import SentenceTransformer
 
 
 class EmbeddingService(Protocol):
-    def embed(self, texts: list[str]) -> list[list[float]]:
-        ...
+    def embed(self, texts: list[str]) -> list[list[float]]: ...
 
 
 class SentenceTransformerEmbeddingService:

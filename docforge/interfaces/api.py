@@ -56,7 +56,11 @@ def register_routes(app: FastAPI) -> None:
             raise HTTPException(status_code=400, detail="Uploaded file is empty")
 
         try:
-            document = service.upload_document(contents, file.filename, file.content_type or "application/pdf")
+            document = service.upload_document(
+                contents,
+                file.filename,
+                file.content_type or "application/pdf",
+            )
         except ValueError as exc:
             logger.warning("Upload rejected: %s", exc)
             raise HTTPException(status_code=415, detail=str(exc)) from exc
@@ -65,14 +69,19 @@ def register_routes(app: FastAPI) -> None:
         return document
 
     @app.get("/documents/{document_id}", response_model=DocumentRead)
-    async def get_document(document_id: str, service: DocumentService = Depends(get_document_service)) -> DocumentRead:
+    async def get_document(
+        document_id: str,
+        service: DocumentService = Depends(get_document_service),
+    ) -> DocumentRead:
         document = service.get_document(document_id)
         if document is None:
             raise HTTPException(status_code=404, detail="Document not found")
         return document
 
     @app.get("/documents", response_model=list[DocumentRead])
-    async def list_documents(service: DocumentService = Depends(get_document_service)) -> list[DocumentRead]:
+    async def list_documents(
+        service: DocumentService = Depends(get_document_service),
+    ) -> list[DocumentRead]:
         return service.list_documents()
 
 

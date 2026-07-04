@@ -6,14 +6,15 @@ import chromadb
 
 
 class VectorStore(Protocol):
-    def add_documents(self, documents: list[dict[str, object]], embeddings: list[list[float]]) -> None:
-        ...
+    def add_documents(
+        self,
+        documents: list[dict[str, object]],
+        embeddings: list[list[float]],
+    ) -> None: ...
 
-    def search(self, query: str, top_k: int = 5) -> list[dict[str, object]]:
-        ...
+    def search(self, query: str, top_k: int = 5) -> list[dict[str, object]]: ...
 
-    def get_chunk_count(self) -> int:
-        ...
+    def get_chunk_count(self) -> int: ...
 
 
 class ChromaVectorStore:
@@ -21,7 +22,11 @@ class ChromaVectorStore:
         self.client = chromadb.PersistentClient(path=persist_directory)
         self.collection = self.client.get_or_create_collection(name=collection_name)
 
-    def add_documents(self, documents: list[dict[str, object]], embeddings: list[list[float]]) -> None:
+    def add_documents(
+        self,
+        documents: list[dict[str, object]],
+        embeddings: list[list[float]],
+    ) -> None:
         if not documents:
             return
 
@@ -29,14 +34,26 @@ class ChromaVectorStore:
             ids=[f"{document['document_id']}-{document['chunk_index']}" for document in documents],
             documents=[str(document["text"]) for document in documents],
             embeddings=embeddings,
-            metadatas=[{key: value for key, value in document.items() if key != "text"} for document in documents],
+            metadatas=[
+                {key: value for key, value in document.items() if key != "text"}
+                for document in documents
+            ],
         )
 
-    def search(self, query: str, top_k: int = 5, metadata_filter: dict[str, object] | None = None) -> list[dict[str, object]]:
+    def search(
+        self,
+        query: str,
+        top_k: int = 5,
+        metadata_filter: dict[str, object] | None = None,
+    ) -> list[dict[str, object]]:
         if not query.strip():
             return []
 
-        results = self.collection.query(query_texts=[query], n_results=top_k, where=metadata_filter)
+        results = self.collection.query(
+            query_texts=[query],
+            n_results=top_k,
+            where=metadata_filter,
+        )
         documents = results.get("documents", [[]])[0]
         metadatas = results.get("metadatas", [[]])[0]
         output: list[dict[str, object]] = []

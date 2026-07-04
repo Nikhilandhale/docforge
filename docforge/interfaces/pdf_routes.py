@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, UploadFile, status
 
-from docforge.application.parsers import PDFParser, ParserRegistry
+from docforge.application.parsers import ParserRegistry, PDFParser
 from docforge.domain.parsing_models import ParsedDocument
 
 logger = logging.getLogger("docforge")

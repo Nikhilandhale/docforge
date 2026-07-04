@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import fitz
 
-from docforge.application.parsers import PDFParser, ParserRegistry
+from docforge.application.parsers import ParserRegistry, PDFParser
 from docforge.domain.parsing_models import ParsedDocument
 from docforge.interfaces.pdf_routes import parse_pdf
 
@@ -67,8 +67,14 @@ def test_parse_pdf_closes_temp_file_before_parsing(monkeypatch: object) -> None:
             return ParsedDocument(document_id=None, metadata={}, page_count=0, chunks=[])
 
     fake_temp_file = FakeTemporaryFile()
-    monkeypatch.setattr("docforge.interfaces.pdf_routes.tempfile.NamedTemporaryFile", lambda *args, **kwargs: fake_temp_file)
-    monkeypatch.setattr("docforge.interfaces.pdf_routes.parser_registry.get_parser", lambda content_type: FakeParser(fake_temp_file))
+    monkeypatch.setattr(
+        "docforge.interfaces.pdf_routes.tempfile.NamedTemporaryFile",
+        lambda *args, **kwargs: fake_temp_file,
+    )
+    monkeypatch.setattr(
+        "docforge.interfaces.pdf_routes.parser_registry.get_parser",
+        lambda content_type: FakeParser(fake_temp_file),
+    )
 
     async def fake_read() -> bytes:
         return b"%PDF-1.4"

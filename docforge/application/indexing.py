@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Protocol
-
 from docforge.application.embeddings import EmbeddingService
 from docforge.application.vector_store import VectorStore
 from docforge.domain.parsing_models import ParsedDocument
